@@ -5,8 +5,16 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './filters/exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
   const config = app.get<ConfigService>(ConfigService);
   app.enableCors();
 
