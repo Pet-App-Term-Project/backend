@@ -56,6 +56,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       return response.status(500).end();
     }
 
-    response.status(status).json(responseObj);
+    response.status(status).send(responseObj);
   }
 }
