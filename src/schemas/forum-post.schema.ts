@@ -21,7 +21,7 @@ export class ForumPost {
   })
   // likes: Array<User>;
   @Prop({
-    ref: 'User',
+    ref: 'Forum',
     type: mongoose.Schema.Types.ObjectId,
   })
   // owner: User;
