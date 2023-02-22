@@ -1,3 +1,4 @@
+import { ChangeUserInformationDto } from './../../dtos/change-user-informations.dto';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -46,9 +47,7 @@ export class AuthService {
   }
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
-    const user = await this.userModel.find({
-      $or: [{ email }],
-    });
+    const user = await this.userModel.findOne({ email }).lean();
 
     if (!user) {
       throw new BadRequestException('Invalid credentials');
@@ -68,5 +67,16 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return { user, accessToken: token };
+  }
+  async changeUserInformation(
+    changeUserInformationDto: ChangeUserInformationDto,
+  ) {
+    const { email, firstName, lastName } = changeUserInformationDto;
+    const user = await this.userModel.findOne({ email }).lean();
+    if (user) {
+      user.email = email;
+      user.firstName = firstName;
+      user.lastName = lastName;
+    }
   }
 }

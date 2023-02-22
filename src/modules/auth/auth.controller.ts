@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { ChangeUserInformationDto } from 'src/dtos/change-user-informations.dto';
 import { RegisterDto } from 'src/dtos/register-dto.dtos';
 import { LoginDto } from 'src/dtos/user-login.dto';
 import { AuthService } from './auth.service';
@@ -15,5 +16,11 @@ export class AuthController {
   register(@Body() registerDto: RegisterDto) {
     console.log(registerDto);
     return this.authService.registerUser(registerDto);
+  }
+  @Patch()
+  changeInformation(
+    @Body() changeUserInformationDto: ChangeUserInformationDto,
+  ) {
+    return this.authService.changeUserInformation(changeUserInformationDto);
   }
 }
