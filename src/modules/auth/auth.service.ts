@@ -5,6 +5,7 @@ import { User, UserDocument } from 'src/schemas/user.schema';
 import { Model } from 'mongoose';
 import { RegisterDto } from 'src/dtos/register-dto.dtos';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from 'src/dtos/user-login.dto';
 export interface AuthResault {
   user: Record<string, any>;
   accessToken: string;
@@ -43,7 +44,29 @@ export class AuthService {
 
     return { user: newUser, accessToken: token };
   }
-  login() {
-    return 'login';
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+    const user = await this.userModel.find({
+      $or: [{ email }],
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user[0].password);
+
+    if (!isPasswordValid) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const payload = {
+      _id: user[0]._id,
+      email,
+    };
+
+    const token = this.jwtService.sign(payload);
+
+    return { user, accessToken: token };
   }
 }
