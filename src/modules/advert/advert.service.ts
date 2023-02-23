@@ -19,4 +19,24 @@ export class AdvertService {
     });
     return advert.save();
   }
+
+  async deleteAdvert(userId: ObjectId, advertId: ObjectId) {
+    const advert = await this.advertModel
+      .findOne({
+        _id: advertId,
+      })
+      .lean();
+    if (!advert) {
+      throw new Error('Advert not found');
+    }
+    if (advert.user.toString() !== userId.toString()) {
+      throw new Error('You are not the owner of this advert');
+    }
+    await this.advertModel.deleteOne({
+      _id: advertId,
+    });
+    return {
+      message: 'Advert deleted',
+    };
+  }
 }
