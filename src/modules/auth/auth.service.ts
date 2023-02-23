@@ -1,4 +1,4 @@
-import { ChangeUserInformationDto } from './../../dtos/change-user-informations.dto';
+import { NodeMailer } from 'nodemailer'
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -16,7 +16,11 @@ export interface AuthResault {
 @Injectable()
 export class AuthService {
   constructor(
+
     private mailerService: MailerService,
+
+
+
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(ForgotPassword.name) private readonly forgotPasswordModel: Model<ForgotPasswordDocument>,
@@ -72,6 +76,7 @@ export class AuthService {
 
     return { user, accessToken: token };
   }
+
   async forgotPassword(email: string) {
     const user = await this.userModel.findOne({ email }).lean();
     if (!user) {
@@ -92,5 +97,9 @@ export class AuthService {
       code:generatedCode
     })
     return true;
+
+  async changePassword(){
+    
+
   }
 }
