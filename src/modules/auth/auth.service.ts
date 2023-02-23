@@ -53,30 +53,19 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user[0].password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
 
     const payload = {
-      _id: user[0]._id,
+      _id: user._id,
       email,
     };
 
     const token = this.jwtService.sign(payload);
 
     return { user, accessToken: token };
-  }
-  async changeUserInformation(
-    changeUserInformationDto: ChangeUserInformationDto,
-  ) {
-    const { email, firstName, lastName } = changeUserInformationDto;
-    const user = await this.userModel.findOne({ email }).lean();
-    if (user) {
-      user.email = email;
-      user.firstName = firstName;
-      user.lastName = lastName;
-    }
   }
 }
