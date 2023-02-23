@@ -1,4 +1,4 @@
-import { ChangeUserInformationDto } from './../../dtos/change-user-informations.dto';
+import { NodeMailer } from 'nodemailer'
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -14,6 +14,7 @@ export interface AuthResault {
 @Injectable()
 export class AuthService {
   constructor(
+
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
@@ -67,5 +68,8 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return { user, accessToken: token };
+  }
+  async changePassword(){
+    
   }
 }
