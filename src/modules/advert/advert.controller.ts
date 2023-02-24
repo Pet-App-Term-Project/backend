@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Post, UseGuards } from '@nestjs/common';
-import { Param } from '@nestjs/common/decorators';
+import { Param, Put } from '@nestjs/common/decorators';
 import { CurrentUser } from 'src/decorators/current-user';
 import { CreateAdvertDto } from 'src/dtos/create-advert.dto';
+import { UpdateAdvertDto } from 'src/dtos/update-advert.dto';
 import { ObjectId, ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdvertService } from './advert.service';
@@ -26,5 +27,19 @@ export class AdvertController {
     @CurrentUser() currentUser,
   ) {
     return this.advertService.deleteAdvert(currentUser._id, advertId);
+  }
+
+  @Put('update/:advertId')
+  updateAdvert(
+    @Param('advertId', new ParseObjectIdPipe()) advertId: ObjectId,
+    @CurrentUser() currentUser,
+    @Body() updateAdvertDto: UpdateAdvertDto,
+  ) {
+    console.log(currentUser);
+    return this.advertService.updateAdvert(
+      currentUser._id,
+      advertId,
+      updateAdvertDto,
+    );
   }
 }
