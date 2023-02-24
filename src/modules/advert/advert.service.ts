@@ -66,4 +66,18 @@ export class AdvertService {
       message: 'Advert updated',
     };
   }
+
+  getAllAdverts() {
+    return this.advertModel.find().populate('user').sort({ createdAt: -1 });
+  }
+
+  getUsersAllAdverts(userId: ObjectId) {
+    return this.advertModel
+      .find({
+        user: userId,
+      })
+      .populate('user')
+      .sort({ createdAt: -1 })
+      .lean();
+  }
 }

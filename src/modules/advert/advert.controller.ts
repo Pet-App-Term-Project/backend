@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Post, UseGuards, Get } from '@nestjs/common';
 import { Param, Put } from '@nestjs/common/decorators';
 import { CurrentUser } from 'src/decorators/current-user';
 import { CreateAdvertDto } from 'src/dtos/create-advert.dto';
@@ -41,5 +41,15 @@ export class AdvertController {
       advertId,
       updateAdvertDto,
     );
+  }
+
+  @Get('all-adverts')
+  getAllAdverts() {
+    return this.advertService.getAllAdverts();
+  }
+
+  @Get('get-users-all-adverts')
+  getUsersAllPosts(@CurrentUser() currentUser) {
+    return this.advertService.getUsersAllAdverts(currentUser._id);
   }
 }
