@@ -17,7 +17,6 @@ export class AdvertController {
     @CurrentUser() currentUser,
     @Body() createAdvertDto: CreateAdvertDto,
   ) {
-    console.log(currentUser);
     return this.advertService.createAdvert(currentUser._id, createAdvertDto);
   }
 
@@ -35,7 +34,6 @@ export class AdvertController {
     @CurrentUser() currentUser,
     @Body() updateAdvertDto: UpdateAdvertDto,
   ) {
-    console.log(currentUser);
     return this.advertService.updateAdvert(
       currentUser._id,
       advertId,

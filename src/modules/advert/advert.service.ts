@@ -53,6 +53,7 @@ export class AdvertService {
           owner: userId,
         },
         updateAdvertDto,
+        { new: true },
       )
       .lean();
 
@@ -62,9 +63,7 @@ export class AdvertService {
     if (advert.user.toString() !== userId.toString()) {
       throw new Error('You are not the owner of this advert');
     }
-    return {
-      message: 'Advert updated',
-    };
+    return advert;
   }
 
   getAllAdverts() {
