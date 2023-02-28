@@ -1,8 +1,8 @@
-import { Body, Controller, Patch, Post, Put } from '@nestjs/common';
-import { ChangeUserInformationDto } from 'src/dtos/change-user-informations.dto';
+import { Body, Controller, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { RegisterDto } from 'src/dtos/register-dto.dtos';
 import { LoginDto } from 'src/dtos/user-login.dto';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +14,6 @@ export class AuthController {
   }
   @Post('register')
   register(@Body() registerDto: RegisterDto) {
-    console.log(registerDto);
     return this.authService.registerUser(registerDto);
   }
 }

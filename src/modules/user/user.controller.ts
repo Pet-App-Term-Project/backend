@@ -1,6 +1,8 @@
-import { Body, Controller, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, Put, UseGuards } from '@nestjs/common';
+import { Console } from 'console';
 import { CurrentUser } from 'src/decorators/current-user';
 import { ChangeUserInformationDto } from 'src/dtos/change-user-informations.dto';
+import { UpdateUserPasswordDto } from 'src/dtos/update-user-password.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserService } from './user.service';
 
@@ -16,6 +18,16 @@ export class UserController {
   ) {
     return this.userService.changeUserInformation(
       changeUserInformationDto,
+      currentUser._id,
+    );
+  }
+  @Put('changePassword')
+  updateUserPassword(
+    @Body() updateUserPasswordDto: UpdateUserPasswordDto,
+    @CurrentUser() currentUser,
+  ) {
+    return this.userService.updateUserPassword(
+      updateUserPasswordDto,
       currentUser._id,
     );
   }
