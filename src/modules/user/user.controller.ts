@@ -22,9 +22,13 @@ export class UserController {
     );
   }
   @Put('changePassword')
-  updateUserPassword(@Body() updateUserPasswordDto:UpdateUserPasswordDto, @CurrentUser() currentUser){
-    console.log(currentUser); 
-   return this.userService.updateUserPassword(updateUserPasswordDto, currentUser._id);
+  updateUserPassword(
+    @Body() updateUserPasswordDto: UpdateUserPasswordDto,
+    @CurrentUser() currentUser,
+  ) {
+    return this.userService.updateUserPassword(
+      updateUserPasswordDto,
+      currentUser._id,
+    );
   }
-
 }

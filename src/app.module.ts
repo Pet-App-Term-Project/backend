@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
 
@@ -24,6 +25,7 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
     AuthModule,
     UserModule,
     WebsocketModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
