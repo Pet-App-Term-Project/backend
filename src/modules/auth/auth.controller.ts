@@ -16,4 +16,9 @@ export class AuthController {
   register(@Body() registerDto: RegisterDto) {
     return this.authService.registerUser(registerDto);
   }
+  @Post('forgot-password')
+  forgotPassword(@Body('email') email:string){
+    console.log(email);
+    return this.authService.forgotPassword(email);
+  }
 }
