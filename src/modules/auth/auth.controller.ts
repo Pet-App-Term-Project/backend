@@ -4,7 +4,6 @@ import { LoginDto } from 'src/dtos/user-login.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -15,7 +14,6 @@ export class AuthController {
   }
   @Post('register')
   register(@Body() registerDto: RegisterDto) {
-    console.log(registerDto);
     return this.authService.registerUser(registerDto);
   }
   @Post('forgot-password')
