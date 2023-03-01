@@ -1,4 +1,4 @@
-import { NodeMailer } from 'nodemailer'
+import { NodeMailer } from 'nodemailer';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +14,6 @@ export interface AuthResault {
 @Injectable()
 export class AuthService {
   constructor(
-
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
@@ -69,7 +68,5 @@ export class AuthService {
 
     return { user, accessToken: token };
   }
-  async changePassword(){
-    
-  }
+  async changePassword() {}
 }

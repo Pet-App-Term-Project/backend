@@ -11,6 +11,15 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
+
+  setNotificationToken(userId: ObjectId, notificationToken: string) {
+    return this.userModel
+      .findByIdAndUpdate(userId, {
+        notificationToken,
+      })
+      .lean();
+  }
+
   async changeUserInformation(
     changeUserInformationDto: ChangeUserInformationDto,
     userId: ObjectId,
@@ -24,20 +33,24 @@ export class UserService {
     }
     return user;
   }
-  async updateUserPassword(updateUserPasswordDto : UpdateUserPasswordDto, userId: ObjectId){
-    const {oldPassword, newPassword, newPasswordCheck} = updateUserPasswordDto;
-    const existedUser = await this.userModel.findOne( { _id:userId } );
-    if(existedUser){
-      if(bcrypt.compare(oldPassword, existedUser.password)){
-        if(newPassword === newPasswordCheck){
+
+  async updateUserPassword(
+    updateUserPasswordDto: UpdateUserPasswordDto,
+    userId: ObjectId,
+  ) {
+    const { oldPassword, newPassword, newPasswordCheck } =
+      updateUserPasswordDto;
+    const existedUser = await this.userModel.findOne({ _id: userId });
+    if (existedUser) {
+      if (bcrypt.compare(oldPassword, existedUser.password)) {
+        if (newPassword === newPasswordCheck) {
           const hashedPassword = await bcrypt.hash(newPassword, 12);
-          existedUser.password= hashedPassword;
+          existedUser.password = hashedPassword;
 
           await existedUser.save();
         }
-      }
-      else{
-        throw new BadRequestException('Invalid credentials')
+      } else {
+        throw new BadRequestException('Invalid credentials');
       }
     }
     return existedUser;

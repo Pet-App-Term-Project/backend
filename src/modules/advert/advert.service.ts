@@ -1,3 +1,4 @@
+import { FirebaseMessagingService } from '@aginix/nestjs-firebase-admin';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,7 +12,31 @@ export class AdvertService {
   constructor(
     @InjectModel(Advert.name)
     private readonly advertModel: Model<AdvertDocument>,
+    private readonly firebaseMessaging: FirebaseMessagingService,
   ) {}
+
+  //   this.firebaseMessaging.send({
+  //     notification: {
+  //         title: ${currentUser.firstName} ${currentUser.lastName} istek gönderdi
+  //         // body: 'Hemen merhaba demek ister misin?'
+  //     },
+  //     android: {
+  //         notification: {
+  //             defaultSound: true
+  //         }
+  //     },
+  //     data : {
+  //         type: 'Requests'
+  //     },
+  //     apns: {
+  //         payload: {
+  //             aps: {
+  //                 sound: 'default'
+  //             }
+  //         }
+  //     },
+  //     token: recipient.notificationToken
+  // })
 
   async createAdvert(userId: ObjectId, createAdvertDto: CreateAdvertDto) {
     const advert = new this.advertModel({
@@ -20,7 +45,6 @@ export class AdvertService {
     });
     return advert.save();
   }
-
   async deleteAdvert(userId: ObjectId, advertId: ObjectId) {
     const advert = await this.advertModel
       .findOne({
