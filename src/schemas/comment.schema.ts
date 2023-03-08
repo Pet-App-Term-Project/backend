@@ -8,16 +8,30 @@ import { User } from './user.schema';
 export class Comment extends mongoose.Document {
   @Prop({
     required: true,
-    type: String,
-  })
-  comment: string;
-
-  @Prop({
-    required: true,
     ref: 'User',
     type: mongoose.Schema.Types.ObjectId,
   })
   user: User;
+
+  @Prop({
+    required: true,
+    type: String,
+  })
+  comment: string;
+
+  //yeniden bakılabilir
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+    required: false,
+  })
+  isReplied: string;
+
+  @Prop({ default: mongoose.now })
+  createdAt: Date;
+
+  @Prop({ default: mongoose.now })
+  updatedAt: Date;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

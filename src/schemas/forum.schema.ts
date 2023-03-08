@@ -9,6 +9,12 @@ import { User } from './user.schema';
 })
 export class Forum {
   @Prop({
+    ref: 'User',
+    type: mongoose.Schema.Types.ObjectId,
+  })
+  user: User;
+
+  @Prop({
     type: String,
     required: true,
   })
@@ -22,16 +28,17 @@ export class Forum {
   likes: Array<User>;
 
   @Prop({
-    ref: 'User',
-    type: mongoose.Schema.Types.ObjectId,
-  })
-  user: User;
-
-  @Prop({
     type: [CommentSchema],
     default: [],
   })
   comments: mongoose.Types.Array<Comment>;
+
+  @Prop({
+    type: Object,
+    required: true,
+    default: [],
+  })
+  categories: Array<string>;
 
   @Prop({
     type: String,

@@ -32,4 +32,18 @@ export class ForumController {
   getUsersAllForumPosts(@CurrentUser() currentUser) {
     return this.forumService.getUsersAllForumPosts(currentUser._id);
   }
+
+  //Kategoriler yazılınca denenecek.
+  @Get('get-all-forum-posts-by-category/:category')
+  getAllForumPostsByCategory(@Param('category') category: string) {
+    return this.forumService.getAllForumPostsByCategory(category);
+  }
+
+  @Delete('delete/:postId')
+  deleteAdvert(
+    @Param('postId', new ParseObjectIdPipe()) postId: ObjectId,
+    @CurrentUser() currentUser,
+  ) {
+    return this.forumService.deleteForumPost(currentUser._id, postId);
+  }
 }
