@@ -17,15 +17,22 @@ export class Comment extends mongoose.Document {
     required: true,
     type: String,
   })
-  comment: string;
+  content: string;
 
   //yeniden bakılabilir
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Forum',
+    required: true,
+  })
+  postId: mongoose.Schema.Types.ObjectId;
+
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment',
     required: false,
   })
-  isReplied: string;
+  parentCommentId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ default: mongoose.now })
   createdAt: Date;
