@@ -10,7 +10,6 @@ import { AdvertModule } from './modules/advert/advert.module';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { ChatModule } from './modules/chat/chat.module';
-import { ForumModule } from './modules/forum/forum.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
 import * as admin from 'firebase-admin';
@@ -38,7 +37,6 @@ import * as admin from 'firebase-admin';
     AuthModule,
     UserModule,
     AdvertModule,
-    ForumModule,
     WebsocketModule,
     ChatModule,
   ],
