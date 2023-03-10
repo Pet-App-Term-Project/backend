@@ -91,7 +91,10 @@ export class AdvertService {
   }
 
   getAllAdverts() {
-    return this.advertModel.find().populate('user').sort({ createdAt: -1 });
+    return this.advertModel
+      .find()
+      .populate('user', 'firstName lastName photoURL')
+      .sort({ createdAt: -1 });
   }
 
   getUsersAllAdverts(userId: ObjectId) {
@@ -99,7 +102,7 @@ export class AdvertService {
       .find({
         user: userId,
       })
-      .populate('user')
+      .populate('user', 'firstName lastName photoURL')
       .sort({ createdAt: -1 })
       .lean();
   }
