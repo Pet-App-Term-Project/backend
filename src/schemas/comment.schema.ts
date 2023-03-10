@@ -27,6 +27,7 @@ export class Comment extends mongoose.Document {
   })
   postId: mongoose.Schema.Types.ObjectId;
 
+  //yeniden bakılabilir
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment',
