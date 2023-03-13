@@ -80,20 +80,20 @@ export class ForumService {
         },
         {
           $addToSet: {
-            comments: { user: userId, comment: comment },
+            comments: { user: userId, content: comment },
           },
         },
         { new: true },
       )
-      .populate('comments.user', '_id firstName lastName photoURL')
+      // .populate('comments.user', '_id firstName lastName photoURL')
       .lean();
     // post.comments = post.comments.reverse();
-    if (!post) {
-      throw new Error('Post not found');
-    }
-    if (post.user.toString() !== userId.toString()) {
-      throw new Error('You are not the owner of posts comment');
-    }
+    // if (!post) {
+    //   throw new Error('Post not found');
+    // }
+    // if (post.user.toString() !== userId.toString()) {
+    //   throw new Error('You are not the owner of posts comment');
+    // }
     return post.comments;
   }
 

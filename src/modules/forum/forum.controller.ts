@@ -61,8 +61,8 @@ export class ForumController {
   ) {
     console.log(currentUser._id, postId, commentDto.comment);
     return this.forumService.addComment(
-      currentUser._id,
       postId,
+      currentUser._id,
       commentDto.comment,
     );
   }

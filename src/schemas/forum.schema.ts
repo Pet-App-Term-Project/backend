@@ -12,7 +12,7 @@ export class Forum {
     ref: 'User',
     type: mongoose.Schema.Types.ObjectId,
   })
-  user: User;
+  user: mongoose.Schema.Types.ObjectId;
 
   @Prop({
     type: String,
@@ -31,7 +31,7 @@ export class Forum {
     type: [CommentSchema],
     default: [],
   })
-  comments: Array<Comment>;
+  comments: mongoose.Types.Array<Comment>;
 
   @Prop({
     type: Object,
