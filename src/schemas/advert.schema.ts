@@ -23,7 +23,7 @@ export class Advert {
     type: Array,
     required: true,
   })
-  photoUrl: Array<string>;
+  photoURL: Array<string>;
 
   @Prop({
     type: Object,

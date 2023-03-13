@@ -1,7 +1,7 @@
 import { IsString, IsObject, IsArray } from 'class-validator';
 export class CreateAdvertDto {
   @IsArray()
-  photoUrl: Array<string>;
+  photoURL: Array<string>;
 
   @IsString()
   title: string;

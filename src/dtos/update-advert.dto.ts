@@ -2,7 +2,7 @@ import { IsString, IsObject, IsArray, IsOptional } from 'class-validator';
 export class UpdateAdvertDto {
   @IsOptional()
   @IsArray()
-  photoUrl: Array<string>;
+  photoURL: Array<string>;
 
   @IsOptional()
   @IsString()

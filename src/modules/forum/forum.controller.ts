@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Post, UseGuards, Get } from '@nestjs/common';
 import { Param, Put } from '@nestjs/common/decorators';
 import { CurrentUser } from 'src/decorators/current-user';
+import { CommentDto } from 'src/dtos/comment.dto';
 import { CreateForumPostDto } from 'src/dtos/create-forum-post.dto';
 import { UpdateForumPostDto } from 'src/dtos/update-forum-post.dto';
 import { ObjectId, ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
@@ -45,5 +46,49 @@ export class ForumController {
     @CurrentUser() currentUser,
   ) {
     return this.forumService.deleteForumPost(currentUser._id, postId);
+  }
+
+  @Get('get-comments/:postId')
+  getComments(@Param('postId', new ParseObjectIdPipe()) postId: ObjectId) {
+    return this.forumService.getComments(postId);
+  }
+
+  @Post('add-comment/:postId')
+  addComment(
+    @Param('postId', new ParseObjectIdPipe()) postId: ObjectId,
+    @CurrentUser() currentUser,
+    @Body() commentDto: CommentDto,
+  ) {
+    console.log(currentUser._id, postId, commentDto.comment);
+    return this.forumService.addComment(
+      currentUser._id,
+      postId,
+      commentDto.comment,
+    );
+  }
+
+  @Put('remove-comment/:postId/:commentId')
+  removeComment(
+    @Param('postId', new ParseObjectIdPipe()) postId: ObjectId,
+    @Param('commentId', new ParseObjectIdPipe()) commentId: ObjectId,
+    @CurrentUser() currentUser,
+  ) {
+    return this.forumService.removeComment(currentUser._id, postId, commentId);
+  }
+
+  @Put('like-post/:postId')
+  likePost(
+    @Param('postId', new ParseObjectIdPipe()) postId: ObjectId,
+    @CurrentUser() currentUser,
+  ) {
+    return this.forumService.likePost(currentUser._id, postId);
+  }
+
+  @Put('dislike-post/:postId')
+  unlikePost(
+    @Param('postId', new ParseObjectIdPipe()) postId: ObjectId,
+    @CurrentUser() currentUser,
+  ) {
+    return this.forumService.dislikePost(currentUser._id, postId);
   }
 }

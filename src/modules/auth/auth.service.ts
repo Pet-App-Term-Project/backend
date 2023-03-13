@@ -8,7 +8,10 @@ import { RegisterDto } from 'src/dtos/register-dto.dtos';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from 'src/dtos/user-login.dto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { ForgotPassword, ForgotPasswordDocument } from 'src/schemas/forgot-password.schema';
+import {
+  ForgotPassword,
+  ForgotPasswordDocument,
+} from 'src/schemas/forgot-password.schema';
 export interface AuthResault {
   user: Record<string, any>;
   accessToken: string;
@@ -19,7 +22,8 @@ export class AuthService {
     private mailerService: MailerService,
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(ForgotPassword.name) private readonly forgotPasswordModel: Model<ForgotPasswordDocument>,
+    @InjectModel(ForgotPassword.name)
+    private readonly forgotPasswordModel: Model<ForgotPasswordDocument>,
   ) {}
 
   async registerUser(registerDto: RegisterDto) {
@@ -78,7 +82,7 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Invalid Credentials');
     }
-    const generatedCode = String(Math.floor(100000 + Math.random() * 900000))
+    const generatedCode = String(Math.floor(100000 + Math.random() * 900000));
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
@@ -90,10 +94,8 @@ export class AuthService {
       text: generatedCode,
     });
     const code = await this.forgotPasswordModel.create({
-      code:generatedCode
-    })
+      code: generatedCode,
+    });
     return true;
-
-  async changePassword(){
   }
 }

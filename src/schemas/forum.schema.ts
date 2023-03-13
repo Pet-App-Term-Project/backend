@@ -31,7 +31,7 @@ export class Forum {
     type: [CommentSchema],
     default: [],
   })
-  comments: mongoose.Types.Array<Comment>;
+  comments: Array<Comment>;
 
   @Prop({
     type: Object,

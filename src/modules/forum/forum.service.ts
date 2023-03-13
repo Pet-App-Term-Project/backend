@@ -63,4 +63,88 @@ export class ForumService {
       message: 'Post deleted',
     };
   }
+
+  async getComments(postId: ObjectId) {
+    const post = await this.forumModel
+      .findById(postId)
+      .populate('comments.user', '_id firstName lastName photoURL')
+      .lean();
+    return post.comments.reverse();
+  }
+
+  async addComment(postId: ObjectId, userId: ObjectId, comment: string) {
+    const post = await this.forumModel
+      .findOneAndUpdate(
+        {
+          _id: postId,
+        },
+        {
+          $addToSet: {
+            comments: { user: userId, comment: comment },
+          },
+        },
+        { new: true },
+      )
+      .populate('comments.user', '_id firstName lastName photoURL')
+      .lean();
+    // post.comments = post.comments.reverse();
+    if (!post) {
+      throw new Error('Post not found');
+    }
+    if (post.user.toString() !== userId.toString()) {
+      throw new Error('You are not the owner of posts comment');
+    }
+    return post.comments;
+  }
+
+  removeComment(userId: ObjectId, postId: ObjectId, commentId: ObjectId) {
+    return this.forumModel
+      .findOneAndUpdate(
+        {
+          _id: postId,
+        },
+        {
+          $pull: {
+            comments: {
+              _id: commentId,
+              user: userId,
+            },
+          },
+        },
+        { new: true },
+      )
+      .lean();
+  }
+
+  likePost(userId: ObjectId, postId: ObjectId) {
+    return this.forumModel
+      .findOneAndUpdate(
+        {
+          _id: postId,
+        },
+        {
+          $addToSet: {
+            likes: userId,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+  }
+
+  dislikePost(userId: ObjectId, postId: ObjectId) {
+    return this.forumModel
+      .findOneAndUpdate(
+        {
+          _id: postId,
+        },
+        {
+          $pull: {
+            likes: userId,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+  }
 }
