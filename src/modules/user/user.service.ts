@@ -157,8 +157,8 @@ export class UserService {
   }
 
   async getUserData(userId: ObjectId) {
-    const User = await this.userModel.findOne({ _id: userId });
-    const advert = await this.userModel.findOne({ user: userId });
-    return { User, advert };
+    const user = await this.userModel.findOne({ _id: userId });
+    const advert = await this.advertModel.findOne({ user: userId });
+    return { user, advert };
   }
 }
