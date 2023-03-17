@@ -78,4 +78,8 @@ export class UserController {
   ) {
     return this.userService.listMessages(currentUser._id, friendId);
   }
+  @Get()
+  GetUserData(@CurrentUser() CurrentUser) {
+    return this.userService.getUserData(CurrentUser._id);
+  }
 }

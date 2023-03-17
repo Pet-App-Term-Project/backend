@@ -1,4 +1,3 @@
-import { NodeMailer } from 'nodemailer';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';

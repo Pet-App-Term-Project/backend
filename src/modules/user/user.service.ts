@@ -7,11 +7,14 @@ import { ObjectId } from 'src/pipes/parse-object-id.pipe';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { Chat, ChatDocument } from 'src/schemas/chat.schema';
+import { Advert, AdvertDocument } from 'src/schemas/advert.schema';
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(Chat.name) private readonly chatModel: Model<ChatDocument>,
+    @InjectModel(Advert.name)
+    private readonly advertModel: Model<AdvertDocument>,
   ) {}
 
   setNotificationToken(userId: ObjectId, notificationToken: string) {
@@ -151,5 +154,11 @@ export class UserService {
     }
     const filterMessages = chat.messages.filter((item) => item);
     return filterMessages;
+  }
+
+  async getUserData(userId: ObjectId) {
+    const User = await this.userModel.findOne({ _id: userId });
+    const advert = await this.userModel.findOne({ user: userId });
+    return { User, advert };
   }
 }
