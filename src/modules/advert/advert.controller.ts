@@ -50,4 +50,11 @@ export class AdvertController {
   getUsersAllPosts(@CurrentUser() currentUser) {
     return this.advertService.getUsersAllAdverts(currentUser._id);
   }
+
+  @Get('single-advert/:advertId')
+  getSingleAdvert(
+    @Param('advertId', new ParseObjectIdPipe()) advertId: ObjectId,
+  ) {
+    return this.advertService.getSingleAdvert(advertId);
+  }
 }

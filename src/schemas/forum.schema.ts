@@ -12,7 +12,7 @@ export class Forum {
     ref: 'User',
     type: mongoose.Schema.Types.ObjectId,
   })
-  user: mongoose.Schema.Types.ObjectId;
+  user: User;
 
   @Prop({
     type: String,

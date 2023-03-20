@@ -106,4 +106,17 @@ export class AdvertService {
       .sort({ createdAt: -1 })
       .lean();
   }
+
+  async getSingleAdvert(advertId: ObjectId) {
+    const advert = await this.advertModel
+      .findById(advertId)
+      .populate('user', 'firstName lastName photoURL')
+      .lean();
+
+    if (!advert) {
+      throw new Error('This advert does not exist');
+    }
+
+    return advert;
+  }
 }

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CurrentUser } from 'src/decorators/current-user';
 import { ChangeUserInformationDto } from 'src/dtos/change-user-informations.dto';
+import { ChatMessageDto } from 'src/dtos/chat-message.dto';
 import { SetNotificationTokenDto } from 'src/dtos/notification-token.dto';
 import { UpdateUserPasswordDto } from 'src/dtos/update-user-password.dto';
 import { ObjectId, ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
@@ -62,13 +63,14 @@ export class UserController {
   @Post('send-message/:receipient')
   sendMessage(
     @CurrentUser() CurrentUser,
-    @Param('receipient', new ParseObjectIdPipe()) recipient: ObjectId,
-    @Body() messageDto: any,
+    @Param('receipient', new ParseObjectIdPipe()) receipient: ObjectId,
+    @Body() chatMessageDto: ChatMessageDto,
   ) {
+    console.log('chatmessagedto', chatMessageDto);
     return this.userService.sendMessage(
       CurrentUser._id,
-      recipient,
-      messageDto.message,
+      receipient,
+      chatMessageDto,
     );
   }
   @Get('list-messages/:friendId')
@@ -76,10 +78,17 @@ export class UserController {
     @CurrentUser() currentUser,
     @Param('friendId', new ParseObjectIdPipe()) friendId: ObjectId,
   ) {
+    console.log('chat =========>', currentUser._id, friendId);
+
     return this.userService.listMessages(currentUser._id, friendId);
   }
   @Get()
   GetUserData(@CurrentUser() CurrentUser) {
     return this.userService.getUserData(CurrentUser._id);
+  }
+
+  @Get('list-chats')
+  getUserChats(@CurrentUser() currentUser) {
+    return this.userService.getUserChats(currentUser._id);
   }
 }

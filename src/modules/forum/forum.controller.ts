@@ -3,7 +3,6 @@ import { Param, Put } from '@nestjs/common/decorators';
 import { CurrentUser } from 'src/decorators/current-user';
 import { CommentDto } from 'src/dtos/comment.dto';
 import { CreateForumPostDto } from 'src/dtos/create-forum-post.dto';
-import { UpdateForumPostDto } from 'src/dtos/update-forum-post.dto';
 import { ObjectId, ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ForumService } from './forum.service';

@@ -26,7 +26,7 @@ export class AppGateway {
 
       // eslint-disable-next-line no-param-reassign
       client.userId = jwtPayload._id;
-      client.join(`user_room:${client.userId}`);
+      client.join(`user:${client.userId}`);
 
       // eslint-disable-next-line no-console
       console.log(client.id, 'connected');

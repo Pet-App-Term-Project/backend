@@ -7,6 +7,8 @@ import { ObjectId } from 'src/pipes/parse-object-id.pipe';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { Chat, ChatDocument } from 'src/schemas/chat.schema';
+import { AppGateway } from '../websocket/websocket.gateway';
+import { ChatMessageDto } from 'src/dtos/chat-message.dto';
 import { Advert, AdvertDocument } from 'src/schemas/advert.schema';
 @Injectable()
 export class UserService {
@@ -15,6 +17,7 @@ export class UserService {
     @InjectModel(Chat.name) private readonly chatModel: Model<ChatDocument>,
     @InjectModel(Advert.name)
     private readonly advertModel: Model<AdvertDocument>,
+    private readonly websocketGateway: AppGateway,
   ) {}
 
   setNotificationToken(userId: ObjectId, notificationToken: string) {
@@ -29,7 +32,6 @@ export class UserService {
     changeUserInformationDto: ChangeUserInformationDto,
     userId: ObjectId,
   ) {
-    const { email, firstName, lastName } = changeUserInformationDto;
     const user = await this.userModel
       .findOneAndUpdate(userId, changeUserInformationDto, { new: true })
       .lean();
@@ -84,26 +86,47 @@ export class UserService {
       });
     }
   }
-  async sendMessage(userId: ObjectId, receipent: ObjectId, message: string) {
+
+  async sendMessage(
+    userId: ObjectId,
+    receipient: ObjectId,
+    chatMessageDto: ChatMessageDto,
+  ) {
+    console.log(chatMessageDto);
+
     const chat = await this.chatModel
       .findOne({
         $or: [
           {
             user1: userId,
-            user2: receipent,
+            user2: receipient,
           },
           {
-            user1: receipent,
+            user1: receipient,
             user2: userId,
           },
         ],
       })
       .lean();
     const user = await this.userModel.findById(userId);
-    const receipentUser = await this.userModel.findById(receipent);
+
     if (!chat) {
       throw new BadRequestException('Chat not found');
     }
+
+    this.websocketGateway.server.to(`user:${receipient._id}`).emit('MESSAGE', {
+      message: {
+        _id: Math.round(Math.random() * 1000000),
+        text: chatMessageDto.message,
+        createdAt: new Date(),
+        user: {
+          _id: user._id,
+          name: `${user.firstName} ${user.lastName}`,
+          avatar: chatMessageDto.avatar,
+        },
+      },
+    });
+
     await this.chatModel
       .findOneAndUpdate(
         {
@@ -118,14 +141,16 @@ export class UserService {
             },
           ],
         },
+
         {
           $push: {
             messages: {
               _id: Math.round(Math.random() * 1000000),
-              text: message,
+              text: chatMessageDto.message,
               user: {
                 _id: user._id,
-                name: `${user.firstName} ${user.lastName}`,
+                name: user.firstName,
+                avatar: chatMessageDto.avatar,
               },
             },
           },
@@ -149,10 +174,12 @@ export class UserService {
         ],
       })
       .lean();
+
     if (!chat) {
       throw new BadRequestException('Chat not found');
     }
-    const filterMessages = chat.messages.filter((item) => item);
+
+    const filterMessages = chat.messages.filter((item) => item).reverse();
     return filterMessages;
   }
 
@@ -160,5 +187,35 @@ export class UserService {
     const user = await this.userModel.findOne({ _id: userId });
     const advert = await this.advertModel.findOne({ user: userId });
     return { user, advert };
+  }
+
+  async getUserChats(userId: ObjectId) {
+    const isUserExist = await this.userModel.findById(userId);
+
+    if (!isUserExist) {
+      throw new BadRequestException('User not found');
+    }
+
+    const userChats = await this.chatModel
+      .find({
+        $or: [
+          {
+            user1: userId,
+          },
+          {
+            user2: userId,
+          },
+        ],
+      })
+      .populate('user1', 'firstName lastName photoURL')
+      .populate('user2', 'firstName lastName photoURL')
+      .lean();
+    if (userChats.length === 0) {
+      throw new BadRequestException('There is no chat for this user');
+    }
+
+    console.log(userChats);
+
+    return userChats;
   }
 }
