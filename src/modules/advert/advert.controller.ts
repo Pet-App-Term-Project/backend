@@ -3,6 +3,7 @@ import { Param, Put } from '@nestjs/common/decorators';
 import { CurrentUser } from 'src/decorators/current-user';
 import { CreateAdvertDto } from 'src/dtos/create-advert.dto';
 import { UpdateAdvertDto } from 'src/dtos/update-advert.dto';
+import { CreateTagDto } from 'src/dtos/create-tag.dto';
 import { ObjectId, ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdvertService } from './advert.service';
@@ -38,6 +39,20 @@ export class AdvertController {
       currentUser._id,
       advertId,
       updateAdvertDto,
+    );
+  }
+
+  //Userların kendi ilanlarını getirir taglere göre getirmece
+  @Get('get-users-adverts-by-tags/:tags')
+  getUsersAdvertsByTags(
+    @Param('advertId', new ParseObjectIdPipe()) advertId: ObjectId,
+    @CurrentUser() currentUser,
+    @Param('tags') createTagDto: CreateTagDto,
+  ) {
+    return this.advertService.getUsersAdvertsByTags(
+      currentUser._id,
+      advertId,
+      createTagDto,
     );
   }
 

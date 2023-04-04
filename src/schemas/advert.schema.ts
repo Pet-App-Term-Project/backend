@@ -49,6 +49,14 @@ export class Advert {
   })
   breed: string;
 
+  //İlan için advert şeması
+  @Prop({
+    type: Object,
+    required: true,
+    default: [],
+  })
+  tags: Array<string>;
+
   @Prop({
     type: String,
     required: true,

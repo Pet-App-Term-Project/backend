@@ -20,4 +20,7 @@ export class CreateAdvertDto {
 
   @IsString()
   species: string;
+
+  @IsArray()
+  filters: Array<number>;
 }

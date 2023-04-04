@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateAdvertDto } from 'src/dtos/create-advert.dto';
 import { UpdateAdvertDto } from 'src/dtos/update-advert.dto';
+import { CreateTagDto } from 'src/dtos/create-tag.dto';
 import { ObjectId } from 'src/pipes/parse-object-id.pipe';
 import { Advert, AdvertDocument } from 'src/schemas/advert.schema';
 
@@ -38,9 +39,11 @@ export class AdvertService {
   //     token: recipient.notificationToken
   // })
 
+  //Tag için yeni Dto oluşturuldu. Advert şemasına tagler eklenecek(emum veya array olarak).
   async createAdvert(userId: ObjectId, createAdvertDto: CreateAdvertDto) {
     const advert = new this.advertModel({
       ...createAdvertDto,
+      ...CreateTagDto,
       user: userId,
     });
     return advert.save();
@@ -94,6 +97,22 @@ export class AdvertService {
     return this.advertModel
       .find()
       .populate('user', 'firstName lastName photoURL')
+      .sort({ createdAt: -1 });
+  }
+
+  //Userların advertleri taglere göre getiriliyor(?). Denenecek.
+  getUsersAdvertsByTags(
+    userId: ObjectId,
+    advertId: ObjectId,
+    createTagDto: CreateTagDto,
+  ) {
+    return this.advertModel
+      .find({
+        _id: advertId,
+        user: userId,
+        tags: createTagDto,
+      })
+      .populate('user')
       .sort({ createdAt: -1 });
   }
 

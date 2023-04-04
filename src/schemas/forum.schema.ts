@@ -40,6 +40,14 @@ export class Forum {
   })
   categories: Array<string>;
 
+  //Forum postu için tag şeması
+  @Prop({
+    type: Object,
+    required: true,
+    default: [],
+  })
+  tags: Array<string>;
+
   @Prop({
     type: String,
   })
