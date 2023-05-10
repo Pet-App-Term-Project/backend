@@ -17,7 +17,6 @@ export class AddMatchUserController {
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   uploadImageToCloudinary(@UploadedFile() file: MulterFile) {
-    console.log('image', file);
     return this.addMatchUserService.uploadImageToCloudinary(file);
   }
 }

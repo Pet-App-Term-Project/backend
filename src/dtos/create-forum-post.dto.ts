@@ -1,10 +1,4 @@
-import {
-  IsOptional,
-  IsString,
-  IsUrl,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateForumPostDto {
   @IsString()
@@ -13,7 +7,6 @@ export class CreateForumPostDto {
   content: string;
 
   @IsString()
-  @IsUrl()
   @IsOptional()
-  image?: string;
+  image: string;
 }

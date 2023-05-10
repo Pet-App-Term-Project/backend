@@ -27,6 +27,7 @@ export class Chat {
 
   @Prop({
     type: String,
+    default: '',
   })
   lastMessage: string;
 }

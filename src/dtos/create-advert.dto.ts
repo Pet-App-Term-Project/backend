@@ -1,4 +1,4 @@
-import { IsString, IsObject, IsArray } from 'class-validator';
+import { IsString, IsObject, IsArray, IsOptional } from 'class-validator';
 export class CreateAdvertDto {
   @IsArray()
   photoURL: Array<string>;
@@ -16,6 +16,7 @@ export class CreateAdvertDto {
   age: string;
 
   @IsString()
+  @IsOptional()
   breed: string;
 
   @IsString()

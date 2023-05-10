@@ -154,6 +154,9 @@ export class UserService {
               },
             },
           },
+          $set: {
+            lastMessage: chatMessageDto.message,
+          },
         },
         { new: true },
       )
@@ -215,10 +218,21 @@ export class UserService {
       .populate('user1', 'firstName lastName photoURL')
       .populate('user2', 'firstName lastName photoURL')
       .lean();
+
+    console.log('user chatsssss', userChats);
+
     if (userChats.length === 0) {
       throw new BadRequestException('There is no chat for this user');
     }
 
     return userChats;
+  }
+
+  async deleteChat(chatId: ObjectId) {
+    const chat = await this.chatModel.findByIdAndDelete(chatId);
+    if (!chat) {
+      throw new BadRequestException('Chat not found');
+    }
+    return chat;
   }
 }
