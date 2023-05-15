@@ -1,18 +1,18 @@
-import { IsString, IsNumber, IsUrl } from 'class-validator';
+import { IsString, IsNumber, IsUrl, IsArray } from 'class-validator';
 
 export class AddMatchUserDto {
   @IsString()
-  petName: string;
+  name: string;
 
   @IsString()
-  petType: string;
-
-  @IsString()
-  petSpecie: string;
+  species: string;
 
   @IsNumber()
-  petAge: number;
+  age: number;
 
-  @IsUrl()
-  petImage: string;
+  @IsArray()
+  photoURL: Array<string>;
+
+  @IsString()
+  petDescription: string;
 }

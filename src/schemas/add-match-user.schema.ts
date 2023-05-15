@@ -11,13 +11,9 @@ export class AddMatchUser {
     ref: 'User',
     required: true,
   })
-  user: mongoose.Schema.Types.ObjectId;
+  owner: mongoose.Schema.Types.ObjectId;
 
-  @Prop({
-    type: String,
-    required: true,
-  })
-  title: string;
+  
 
   @Prop({
     type: Array,
@@ -27,7 +23,6 @@ export class AddMatchUser {
 
   @Prop({
     type: Object,
-    required: true,
   })
   location: object;
 
@@ -35,7 +30,7 @@ export class AddMatchUser {
     type: String,
     required: true,
   })
-  description: string;
+  petDescription: string;
 
   @Prop({
     type: String,
@@ -47,7 +42,7 @@ export class AddMatchUser {
     type: String,
     required: true,
   })
-  breed: string;
+  name: string;
 
   @Prop({
     type: String,

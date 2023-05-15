@@ -9,6 +9,7 @@ import {
 import { MediaService } from '../media/media.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { MulterFile } from '@webundsoehne/nest-fastify-file-upload';
+import { ObjectId } from 'src/pipes/parse-object-id.pipe';
 
 @Injectable()
 export class AddMatchUserService {
@@ -24,14 +25,24 @@ export class AddMatchUserService {
     });
   }
 
-  async createMatchUser(addMatchUserDto: AddMatchUserDto) {
+  async createMatchUser(userId: ObjectId, addMatchUserDto: AddMatchUserDto) {
     const createMatchUser = await this.addMatchUserModel.create({
-      petName: addMatchUserDto.petName,
-      petAge: addMatchUserDto.petAge,
-      petSpecie: addMatchUserDto.petSpecie,
-      petType: addMatchUserDto.petType,
+      name: addMatchUserDto.name,
+      age: addMatchUserDto.age,
+      species: addMatchUserDto.species,
+      photoURL: addMatchUserDto.photoURL,
+      petDescription: addMatchUserDto.petDescription,
+      owner: userId,
     });
 
     return createMatchUser;
+  }
+
+  async getAllUsers() {
+    const allUsers = await this.addMatchUserModel.find().populate('owner');
+
+    console.log(allUsers);
+
+    return allUsers;
   }
 }
