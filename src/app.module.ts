@@ -14,7 +14,11 @@ import { ForumModule } from './modules/forum/forum.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
 import * as admin from 'firebase-admin';
+
 import { MatchModule } from './modules/match/match.module';
+import { AddMatchUserModule } from './modules/add-match-user/add-match-user.module';
+import { MediaModule } from './modules/media/media.module';
+
 
 @Module({
   imports: [
@@ -43,6 +47,8 @@ import { MatchModule } from './modules/match/match.module';
     WebsocketModule,
     ChatModule,
     MatchModule,
+    AddMatchUserModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -129,6 +129,7 @@ export class ForumService {
         },
         { new: true },
       )
+      .populate('user')
       .lean();
   }
 
@@ -145,6 +146,7 @@ export class ForumService {
         },
         { new: true },
       )
+      .populate('user')
       .lean();
   }
 }

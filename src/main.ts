@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './filters/exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { contentParser } from 'fastify-multer';
 
 import {
   FastifyAdapter,
@@ -17,6 +18,8 @@ async function bootstrap() {
   );
   const config = app.get<ConfigService>(ConfigService);
   app.enableCors();
+
+  await app.register(contentParser);
 
   const configSwagger = new DocumentBuilder()
     .setTitle('Smart Pet App')

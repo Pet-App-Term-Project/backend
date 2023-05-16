@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -90,5 +91,11 @@ export class UserController {
   @Get('list-chats')
   getUserChats(@CurrentUser() currentUser) {
     return this.userService.getUserChats(currentUser._id);
+  }
+
+  @Delete('delete-chat/:chatId')
+  deleteChat(@Param('chatId', new ParseObjectIdPipe()) chatId: ObjectId) {
+    console.log(chatId);
+    return this.userService.deleteChat(chatId);
   }
 }
