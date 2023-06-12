@@ -6,6 +6,7 @@ import {
   AddMatchUser,
   AddMatchUserDocument,
 } from 'src/schemas/add-match-user.schema';
+import { Chat, ChatDocument } from 'src/schemas/chat.schema';
 import { LikeUser, LikeUserDocument } from 'src/schemas/like-user.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 
@@ -18,6 +19,8 @@ export class MatchService {
     private readonly addMatchUserModel: Model<AddMatchUserDocument>,
     @InjectModel(LikeUser.name)
     private readonly likeUserModel: Model<LikeUserDocument>,
+    @InjectModel(Chat.name)
+    private readonly chatModel: Model<ChatDocument>,
   ) {}
 
   async likeUser(userId: ObjectId, likedUserId: ObjectId, advertId: ObjectId) {
@@ -27,6 +30,7 @@ export class MatchService {
     });
 
     if (!likeUser) {
+      console.log('selam');
       const newLikeUser = new this.likeUserModel({
         user: userId,
         likedUser: likedUserId,
@@ -38,6 +42,8 @@ export class MatchService {
       await this.userModel.findByIdAndUpdate(userId, {
         $push: { interested: advertId },
       });
+
+      console.log('selam');
     }
 
     const likedUser = await this.likeUserModel.findOne({
@@ -54,9 +60,29 @@ export class MatchService {
     console.log('like', newLikeUser);
 
     if (likedUser && newLikeUser) {
-      return {
-        message: 'Matched',
-      };
+      const isExists = await this.chatModel
+        .exists({
+          $or: [
+            {
+              user1: userId,
+              user2: likedUserId,
+            },
+            {
+              user1: likedUserId,
+              user2: userId,
+            },
+          ],
+        })
+        .lean();
+      if (isExists) {
+        return;
+      } else {
+        return this.chatModel.create({
+          user1: userId,
+          user2: likedUserId,
+          message: 'Matched',
+        });
+      }
     }
   }
 }
