@@ -163,7 +163,6 @@ export class UserService {
       .lean();
   }
   async listMessages(userId: ObjectId, friendId: ObjectId) {
-    console.log(userId, friendId);
     const chat = await this.chatModel
       .findOne({
         $or: [

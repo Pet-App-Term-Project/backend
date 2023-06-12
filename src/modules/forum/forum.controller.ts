@@ -37,7 +37,6 @@ export class ForumController {
   //Kategoriler yazılınca denenecek.
   @Get('get-all-forum-posts-by-category/:categoryName')
   getAllForumPostsByCategory(@Param('categoryName') categoryName: Categories) {
-    console.log(categoryName);
     return this.forumService.getForumPostByCategories(categoryName);
   }
 

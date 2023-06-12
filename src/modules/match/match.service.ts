@@ -30,7 +30,6 @@ export class MatchService {
     });
 
     if (!likeUser) {
-      console.log('selam');
       const newLikeUser = new this.likeUserModel({
         user: userId,
         likedUser: likedUserId,
@@ -42,8 +41,6 @@ export class MatchService {
       await this.userModel.findByIdAndUpdate(userId, {
         $push: { interested: advertId },
       });
-
-      console.log('selam');
     }
 
     const likedUser = await this.likeUserModel.findOne({
@@ -55,9 +52,6 @@ export class MatchService {
       user: userId,
       likedUser: likedUserId,
     });
-
-    console.log('liked', likedUser);
-    console.log('like', newLikeUser);
 
     if (likedUser && newLikeUser) {
       const isExists = await this.chatModel
